@@ -61,7 +61,7 @@ public class HomeTask1 {
     }
     public static String numberConversion (double result){
         BigDecimal conclusion = new BigDecimal(result);
-        conclusion = conclusion.setScale(2, RoundingMode.DOWN);
+        conclusion.setScale(2, RoundingMode.DOWN);
         DecimalFormat format = new DecimalFormat("0.#");
 
         return format.format(result);
