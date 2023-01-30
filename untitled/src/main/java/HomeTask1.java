@@ -1,35 +1,38 @@
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.Scanner;
-
 
 public class HomeTask1 {
     public static double first;
     public static double second;
-    public static final String INV = "-0";
+    public static final String EXIT = "exit";
 
     public static void main(String[] args) {
         Scanner operands = new Scanner(System.in);
-        String a = operands.next();
-        String b = operands.next();
-        if (isNumberCheck(a, b)) {
-            plusOperation(first, second);
-            minusOperation(first, second);
-            multiplicationOperation(first, second);
-            divisionOperation(first, second);
+        while (operands.hasNext()) {
+            String a = operands.next();
+            if (!a.equals(EXIT)) {
+                String b = operands.next();
+                if (isNumberCheck(a, b)) {
+                    plusOperation(first, second);
+                    minusOperation(first, second);
+                    multiplicationOperation(first, second);
+                    divisionOperation(first, second);
+                }
+            } else {
+                break;
+            }
         }
     }
     public static boolean isNumberCheck(String a, String b) {
-        if (a == null || b == null)  {
+        if (a == null || b == null) {
             System.out.println("You entered an empty value");
             return false;
         }
-        if (a.equals(INV) || b.equals(INV)){
-            System.out.println("Zero cannot be negative");
-            return false;
-        }
-        try {
+            if (a.equals("-0")) {
+                a =String.valueOf(Math.abs(Integer.parseInt(a)));
+            } if (b.equals("-0")){
+            b = String.valueOf(Math.abs(Integer.parseInt(b)));
+            }try {
             first = Double.parseDouble(a);
             second = Double.parseDouble(b);
         } catch (NumberFormatException error) {
@@ -39,32 +42,34 @@ public class HomeTask1 {
         }
         return true;
     }
-
     public static void plusOperation(double first, double second) {
-        System.out.println("1. The sum is " + numberConversion (first + second) );
+        System.out.println("1. The sum is " + numberConversion(first + second));
     }
 
     public static void minusOperation(double first, double second) {
-        System.out.println("2. The minus is " + numberConversion (first - second));
+        System.out.println("2. The minus is " + numberConversion(first - second));
     }
 
     public static void multiplicationOperation(double first, double second) {
-        System.out.println("3. The multiplication is " + numberConversion (first * second));
+        System.out.println("3. The multiplication is " + numberConversion(first * second));
     }
 
     public static void divisionOperation(double first, double second) {
-        if (second != 0) {
-            System.out.println("4. The division is " + numberConversion (first / second));
-        } else {
-            System.out.println("4. You can't divide by zero");
+        try {
+            double div = first / second;
+            if(Double.isNaN(div)){
+                throw(new ArithmeticException("NAN"));
+            }
+            else if(Double.isInfinite(div)){
+                throw(new ArithmeticException("INFINITE"));
+            }
+            System.out.println("4. The division is " + numberConversion(div));
+        } catch (ArithmeticException e) {
+            System.out.println("4. The second number should not be 0");
         }
     }
     public static String numberConversion (double result){
-        BigDecimal conclusion = new BigDecimal(result);
-        conclusion = conclusion.setScale(2, RoundingMode.DOWN);
-        DecimalFormat format = new DecimalFormat("0.#");
-
+        DecimalFormat format = new DecimalFormat("#.##########");
         return format.format(result);
     }
-
 }
